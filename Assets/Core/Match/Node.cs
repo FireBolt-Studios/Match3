@@ -16,7 +16,6 @@ public class Node : MonoBehaviour {
 		gem = newGem.GetComponent<Gem>();
 		newGem.GetComponent<Gem>().mm = mm;
 		newGem.GetComponent<Gem>().type = mm.gems[random].name;
-		newGem.GetComponent<SpriteRenderer>().color = mm.gems[random].color;
 	}
 
 	void Update ()
