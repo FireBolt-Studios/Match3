@@ -189,12 +189,19 @@ public class MatchManager : MonoBehaviour {
 		}
 		else
 		{
-			if (gem != firstGem)
+			if (Vector3.Distance(firstGem.transform.position,gem.transform.position) < 2)
 			{
-				secondGem = gem;
-				StartCoroutine(firstGem.SwapGem(firstGem,secondGem,0.25f));
-				firstGem = null;
-				secondGem = null;
+				if (gem != firstGem)
+				{
+					secondGem = gem;
+					StartCoroutine(firstGem.SwapGem(firstGem,secondGem,0.25f));
+					firstGem = null;
+					secondGem = null;
+				}
+				else
+				{
+					firstGem = null;
+				}
 			}
 			else
 			{
@@ -216,10 +223,6 @@ public class MatchManager : MonoBehaviour {
 				newNode.GetComponent<Node>().posX = x;
 				newNode.GetComponent<Node>().posY = y;
 				nodes[x,y] = newNode.GetComponent<Node>();
-				if (y >= size)
-				{
-					newNode.GetComponent<SpriteRenderer>().enabled = false;
-				}
 			}
 		}
 
