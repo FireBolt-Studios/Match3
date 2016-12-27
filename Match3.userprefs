@@ -1,13 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Core\Ship\ShipStats.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Core\Player\PlayerMatch.cs">
     <Files>
-      <File FileName="Assets\Core\Match\MatchManager.cs" Line="192" Column="84" />
+      <File FileName="Assets\Core\Match\MatchManager.cs" Line="66" Column="12" />
       <File FileName="Assets\Core\Match\Node.cs" Line="1" Column="1" />
       <File FileName="Assets\Core\Match\Gem.cs" Line="1" Column="1" />
-      <File FileName="Assets\Core\Player\PlayerMatch.cs" Line="19" Column="5" />
-      <File FileName="Assets\Core\Ship\Ship.cs" Line="12" Column="3" />
-      <File FileName="Assets\Core\Ship\ShipStats.cs" Line="97" Column="5" />
+      <File FileName="Assets\Core\Ship\Ship.cs" Line="14" Column="24" />
+      <File FileName="Assets\Core\Ship\Ship_Utility.cs" Line="8" Column="46" />
+      <File FileName="Assets\Core\Database\Database.cs" Line="8" Column="1" />
+      <File FileName="Assets\Core\Database\ShipParts.cs" Line="67" Column="26" />
+      <File FileName="Assets\Core\Player\PlayerMatch.cs" Line="19" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -1,24 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public class Ship {
+public class Ship : MonoBehaviour {
 
-	public string Name;
-	public float Worth;
+	public string shipName;
+	public int shipWorth;
 
-	public ShipStats shipStats;
-
-//	public Weapon[] Weapons;
-//	public Reactor Reactor;
-//	public Shield Shield;
-//	public Armor Armor;
-//	public Room[] Rooms;
-//	public Engine Engine;
-
-	public Object[] Cargo;
-
+	public Reactor reactor;
+	public Shield shield;
+	public Engine engine;
+	public Armor armor;
+	public Weapon weapon1;
+	public Weapon weapon2;
 
 }
-
-

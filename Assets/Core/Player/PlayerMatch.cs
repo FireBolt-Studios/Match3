@@ -16,40 +16,47 @@ public class PlayerMatch : MonoBehaviour {
 
 	void Awake ()
 	{
-		//DebugEquipShip();
+		DebugEquipShip();
 	}
 
 
-//	public void DebugEquipShip ()
-//	{
-//		PlayerShip.Weapons[0] = GameObject.FindObjectOfType<Database>().ShipObjects.Weapons[0];
-//		PlayerShip.Weapons[1] = GameObject.FindObjectOfType<Database>().ShipObjects.Weapons[0];
-//		PlayerShip.Reactor = GameObject.FindObjectOfType<Database>().ShipObjects.Reactors[0];
-//		PlayerShip.Shield = GameObject.FindObjectOfType<Database>().ShipObjects.Shields[0];
-//		PlayerShip.Armor = GameObject.FindObjectOfType<Database>().ShipObjects.Armors[0];
-//		PlayerShip.Engine = GameObject.FindObjectOfType<Database>().ShipObjects.Engines[0];
-//		PlayerShip.Rooms[0] = GameObject.FindObjectOfType<Database>().ShipObjects.Rooms[0];
-//		PlayerShip.Rooms[1] = GameObject.FindObjectOfType<Database>().ShipObjects.Rooms[1];
-//		PlayerShip.Rooms[2] = GameObject.FindObjectOfType<Database>().ShipObjects.Rooms[2];
-//
-//		PlayerShip.shipStats.CalcStats();
-//	}
+	public void DebugEquipShip ()
+	{
+		PlayerShip.weapon1 = GameObject.FindObjectOfType<Database>().shipParts.weapons[0];
+		PlayerShip.weapon2 = GameObject.FindObjectOfType<Database>().shipParts.weapons[0];
+		PlayerShip.reactor = GameObject.FindObjectOfType<Database>().shipParts.reators[0];
+		PlayerShip.shield = GameObject.FindObjectOfType<Database>().shipParts.shields[0];
+		PlayerShip.armor = GameObject.FindObjectOfType<Database>().shipParts.armors[0];
+		PlayerShip.engine = GameObject.FindObjectOfType<Database>().shipParts.engines[0];
+	}
 
 	public void AddPoints (string type,int amount)
 	{
 		if (type == "Engineering")
 		{
-			engPoints += amount;
+			PlayerShip.reactor.curEngineeringPoints += amount;
+			if (PlayerShip.reactor.curEngineeringPoints > PlayerShip.reactor.maxEngineeringPoints)
+			{
+				PlayerShip.reactor.curEngineeringPoints = PlayerShip.reactor.maxEngineeringPoints;
+			}
 			engText.text = engPoints.ToString();
 		}
 		if (type == "Science")
 		{
-			sciPoints += amount;
+			PlayerShip.reactor.curSciencePoints += amount;
+			if (PlayerShip.reactor.curSciencePoints > PlayerShip.reactor.maxSciencePoints)
+			{
+				PlayerShip.reactor.curSciencePoints = PlayerShip.reactor.maxSciencePoints;
+			}
 			sciText.text = sciPoints.ToString();
 		}
 		if (type == "Combat")
 		{
-			comPoints += amount;
+			PlayerShip.reactor.curCombatPoints += amount;
+			if (PlayerShip.reactor.curCombatPoints > PlayerShip.reactor.maxCombatPoints)
+			{
+				PlayerShip.reactor.curCombatPoints = PlayerShip.reactor.maxCombatPoints;
+			}
 			comText.text = comPoints.ToString();
 		}
 
