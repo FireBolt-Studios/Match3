@@ -24,6 +24,9 @@ public class MatchManager : MonoBehaviour {
 	public int turnPlayer;
 	public PlayerMatch[] players;
 
+	public float endTurnWait;
+	public float timer;
+
 	void Update ()
 	{
 		//if (initialMatch == false)
@@ -34,6 +37,38 @@ public class MatchManager : MonoBehaviour {
 				//initialMatch = true;
 			}
 		//}
+	}
+
+	public IEnumerator InitiateEndTurn ()
+	{
+		while (timer < endTurnWait)
+		{
+			timer += Time.deltaTime;
+			yield return null;
+		}
+		EndTurn();
+		endTurnWait = 0.5f;
+		timer = 0;
+	}
+
+	public void EndTurn ()
+	{
+		if (turnPlayer == 0)
+		{
+			players[turnPlayer].turnTrue = false;
+			players[targetPlayer].turnTrue = true;
+			turnPlayer = 1;
+			targetPlayer = 0;
+			print("Enemies turn");
+		}
+		else
+		{
+			players[turnPlayer].turnTrue = false;
+			players[targetPlayer].turnTrue = true;
+			turnPlayer = 0;
+			targetPlayer = 1;
+			print("Players turn");
+		}
 	}
 
 	public bool CheckMovement ()
@@ -61,6 +96,10 @@ public class MatchManager : MonoBehaviour {
 
 	public void RemoveGems (Gem[] gems)
 	{
+		if (turnPlayer == 0)
+		{
+			endTurnWait += 0.5f;
+		}
 		if (gems[0].type == "Attack")
 		{
 			players[turnPlayer].DealDamage(players[targetPlayer],gems.Length);
@@ -70,7 +109,6 @@ public class MatchManager : MonoBehaviour {
 				if (gem != null)
 				{
 					nodes[gem.x,gem.y].gem = null;
-					print("Removed: " + gem.type);
 					Destroy(gem.gameObject);
 				}
 			}
@@ -81,7 +119,6 @@ public class MatchManager : MonoBehaviour {
 			if (gem != null)
 			{
 				nodes[gem.x,gem.y].gem = null;
-				print("Removed: " + gem.type);
 				players[turnPlayer].AddPoints(gem.type,1);
 				Destroy(gem.gameObject);
 			}
@@ -214,6 +251,7 @@ public class MatchManager : MonoBehaviour {
 				{
 					secondGem = gem;
 					StartCoroutine(firstGem.SwapGem(firstGem,secondGem,0.25f));
+					StartCoroutine(InitiateEndTurn());
 					firstGem = null;
 					secondGem = null;
 				}
