@@ -6,13 +6,10 @@ public class PlayerMatch : MonoBehaviour {
 
 	public Ship PlayerShip;
 
-	public int engPoints;
-	public int sciPoints;
-	public int comPoints;
+	public bool turnTrue;
 
-	public Text engText;
-	public Text sciText;
-	public Text comText;
+	public int Credits;
+	public int Research;
 
 	void Awake ()
 	{
@@ -28,36 +25,57 @@ public class PlayerMatch : MonoBehaviour {
 		PlayerShip.shield = GameObject.FindObjectOfType<Database>().shipParts.shields[0];
 		PlayerShip.armor = GameObject.FindObjectOfType<Database>().shipParts.armors[0];
 		PlayerShip.engine = GameObject.FindObjectOfType<Database>().shipParts.engines[0];
+
+		PlayerShip.InitializeShip();
+	}
+
+	public void DealDamage (PlayerMatch target,int amount)
+	{
+		float damage = amount + (PlayerShip.weapon1.damage + PlayerShip.weapon2.damage);
+
+		if (target.PlayerShip.curShieldPoints <= 0)
+		{
+			target.PlayerShip.curHullPoints -= damage;
+		}
+		else
+		{
+			target.PlayerShip.curShieldPoints -= damage;
+		}
 	}
 
 	public void AddPoints (string type,int amount)
 	{
+		if (type == "Credit")
+		{
+			Credits += amount;
+		}
+		if (type == "Research")
+		{
+			Research += amount;
+		}
 		if (type == "Engineering")
 		{
-			PlayerShip.reactor.curEngineeringPoints += amount;
-			if (PlayerShip.reactor.curEngineeringPoints > PlayerShip.reactor.maxEngineeringPoints)
+			PlayerShip.curEngineeringPoints += amount;
+			if (PlayerShip.curEngineeringPoints > PlayerShip.reactor.maxEngineeringPoints)
 			{
-				PlayerShip.reactor.curEngineeringPoints = PlayerShip.reactor.maxEngineeringPoints;
+				PlayerShip.curEngineeringPoints = PlayerShip.reactor.maxEngineeringPoints;
 			}
-			engText.text = engPoints.ToString();
 		}
 		if (type == "Science")
 		{
-			PlayerShip.reactor.curSciencePoints += amount;
-			if (PlayerShip.reactor.curSciencePoints > PlayerShip.reactor.maxSciencePoints)
+			PlayerShip.curSciencePoints += amount;
+			if (PlayerShip.curSciencePoints > PlayerShip.reactor.maxSciencePoints)
 			{
-				PlayerShip.reactor.curSciencePoints = PlayerShip.reactor.maxSciencePoints;
+				PlayerShip.curSciencePoints = PlayerShip.reactor.maxSciencePoints;
 			}
-			sciText.text = sciPoints.ToString();
 		}
 		if (type == "Combat")
 		{
-			PlayerShip.reactor.curCombatPoints += amount;
-			if (PlayerShip.reactor.curCombatPoints > PlayerShip.reactor.maxCombatPoints)
+			PlayerShip.curCombatPoints += amount;
+			if (PlayerShip.curCombatPoints > PlayerShip.reactor.maxCombatPoints)
 			{
-				PlayerShip.reactor.curCombatPoints = PlayerShip.reactor.maxCombatPoints;
+				PlayerShip.curCombatPoints = PlayerShip.reactor.maxCombatPoints;
 			}
-			comText.text = comPoints.ToString();
 		}
 
 	}

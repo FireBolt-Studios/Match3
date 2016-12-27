@@ -20,6 +20,10 @@ public class MatchManager : MonoBehaviour {
 	public bool isSettled;
 	public bool initialMatch;
 
+	public int targetPlayer;
+	public int turnPlayer;
+	public PlayerMatch[] players;
+
 	void Update ()
 	{
 		//if (initialMatch == false)
@@ -57,13 +61,28 @@ public class MatchManager : MonoBehaviour {
 
 	public void RemoveGems (Gem[] gems)
 	{
+		if (gems[0].type == "Attack")
+		{
+			players[turnPlayer].DealDamage(players[targetPlayer],gems.Length);
+
+			foreach (Gem gem in gems)
+			{
+				if (gem != null)
+				{
+					nodes[gem.x,gem.y].gem = null;
+					print("Removed: " + gem.type);
+					Destroy(gem.gameObject);
+				}
+			}
+			return;
+		}
 		foreach (Gem gem in gems)
 		{
 			if (gem != null)
 			{
 				nodes[gem.x,gem.y].gem = null;
 				print("Removed: " + gem.type);
-				pMatch.AddPoints(gem.type,1);
+				players[turnPlayer].AddPoints(gem.type,1);
 				Destroy(gem.gameObject);
 			}
 		}
@@ -227,6 +246,18 @@ public class MatchManager : MonoBehaviour {
 		}
 
 		initialized = true;
+
+		targetPlayer = Random.Range(0,1);
+		if (targetPlayer == 0)
+		{
+			players[1].turnTrue = true;
+			turnPlayer = 1;
+		}
+		else
+		{
+			players[0].turnTrue = true;
+			turnPlayer = 0;
+		}
 	}
 
 

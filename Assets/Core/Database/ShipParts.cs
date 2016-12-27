@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class ShipParts {
@@ -23,7 +24,7 @@ public class Part {
 public class Weapon : Part {
 
 	public float damage;
-	public string[] damageTypes;
+	public List<string> damageTypes = new List<string>();
 
 }
 
@@ -31,12 +32,11 @@ public class Weapon : Part {
 public class Shield : Part {
 
 	public float MaxShieldPoints;
-	public float CurShieldPoints;
 
 	public float reduction;
-	public string[] reductionTypes;
+	public List<string> reductionTypes = new List<string>();
 	public float reflection;
-	public string[] reflectionTypes;
+	public List<string> reflectionTypes = new List<string>();
 
 }
 
@@ -44,21 +44,19 @@ public class Shield : Part {
 public class Reactor : Part {
 
 	public int maxEngineeringPoints;
-	public int curEngineeringPoints;
 	public int maxSciencePoints;
-	public int curSciencePoints;
 	public int maxCombatPoints;
-	public int curCombatPoints;
 
 	public float conversion;
-	public string[] conversionTypes;
+	public List<string> conversionTypes = new List<string>();
 
 }
 [System.Serializable]
 public class Engine : Part {
 
 	public float fuelEfficiency;
-	public string[] fuelTypes;
+	public float maxFuelPoints;
+	public List<string> fuelTypes = new List<string>();
 	public float speed;
 
 }
@@ -67,7 +65,6 @@ public class Engine : Part {
 public class Armor : Part {
 
 	public float maxHullPoints;
-	public float curHullPoints;
 
 }
 
