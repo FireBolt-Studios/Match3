@@ -189,7 +189,7 @@ public class MatchManager : MonoBehaviour {
 		}
 		else
 		{
-			if (Vector3.Distance(firstGem.transform.position,gem.transform.position) < 2)
+			if (Vector3.Distance(firstGem.transform.position,gem.transform.position) < 1.1f)
 			{
 				if (gem != firstGem)
 				{
