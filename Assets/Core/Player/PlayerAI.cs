@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerAI : MonoBehaviour {
 
@@ -19,98 +20,132 @@ public class PlayerAI : MonoBehaviour {
 
 	public void FindMatch ()
 	{
-		print("Trying to find match.");
-		foreach (Node node in mm.nodes)
+		List<Gem> matchTwoGems = GetAllHorizontalMatchTwo();
+
+		foreach (Gem gem in matchTwoGems)
 		{
-			if (node.gem != null)
+			Gem[] gemsToSwap = null;
+
+			gemsToSwap = MatchHorizontalLeftDown(gem);
+			gemsToSwap = MatchHorizontalLeftMiddle(gem);
+			gemsToSwap = MatchHorizontalLeftUp(gem);
+			gemsToSwap = MatchHorizontalRightDown(gem);
+			gemsToSwap = MatchHorizontalRightMiddle(gem);
+			gemsToSwap = MatchHorizontalRightUp(gem);
+
+			if (gemsToSwap != null)
 			{
-				if (FindGemToMatch(node.gem))
-				{
-					return;
-				}
+				print("Swapping: " + gemsToSwap[0].type + " with " + gemsToSwap[1].type);
+				StartCoroutine(gemsToSwap[0].SwapGem(gemsToSwap[0],gemsToSwap[1],0.25f));
+				mm.EndTurn();
 			}
 		}
-
-		playerMatch.turnTrue = false;
-		return;
 	}
 
-	public bool FindGemToMatch (Gem gem)
+	public List<Gem> GetAllHorizontalMatchTwo ()
 	{
-		// CHECK MATCH 2 HORIZONTAL
-		if (gem.x < (mm.size-2))
+		List<Gem> matchTwos = new List<Gem>();
+		for (int x = 0; x < mm.size-1; x++)
 		{
-			if (gem.x > 0)
+			for (int y = 0; y < mm.size; y++)
 			{
-				if (gem.y < (mm.size-1))
+				if (mm.nodes[x,y].gem.type == mm.nodes[x+1,y].gem.type)
 				{
-					if (gem.y > 0)
-					{
-						// CHECK MATCH 2 MIDDLE SPACE
-						if (mm.nodes[gem.x+2,gem.y].gem.type == gem.type)
-						{
-							// CHECK MIDDLE UP IS OF TYPE
-							if (mm.nodes[gem.x+1,gem.y+1].gem.type == gem.type)
-							{
-								print("Found possible match middle up.");
-								// SWAP LEFT UP GEM WITH GEM BELOW
-								StartCoroutine(mm.nodes[gem.x+1,gem.y+1].gem.SwapGem(mm.nodes[gem.x+1,gem.y+1].gem,mm.nodes[gem.x+1,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}
-							// CHECK MIDDLE DOWN IS OF TYPE
-							if (mm.nodes[gem.x+1,gem.y-1].gem.type == gem.type)
-							{
-								print("Found possible match middle down.");
-								// SWAP LEFT UP GEM WITH GEM BELOW
-								StartCoroutine(mm.nodes[gem.x+1,gem.y-1].gem.SwapGem(mm.nodes[gem.x+1,gem.y-1].gem,mm.nodes[gem.x+1,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}
-						}
-
-						// CHECK MATCH 2 SIDE BY SIDE
-						if (mm.nodes[gem.x+1,gem.y].gem.type == gem.type)
-						{
-							// CHECK LEFT UP IS OF TYPE
-							if (mm.nodes[gem.x-1,gem.y+1].gem.type == gem.type)
-							{
-								print("Found possible match left up.");
-								// SWAP LEFT UP GEM WITH GEM BELOW
-								StartCoroutine(mm.nodes[gem.x-1,gem.y+1].gem.SwapGem(mm.nodes[gem.x-1,gem.y+1].gem,mm.nodes[gem.x-1,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}
-							// CHECK LEFT DOWN IS OF TYPE
-							if (mm.nodes[gem.x-1,gem.y-1].gem.type == gem.type)
-							{
-								print("Found possible match left down.");
-								StartCoroutine(mm.nodes[gem.x-1,gem.y-1].gem.SwapGem(mm.nodes[gem.x-1,gem.y-1].gem,mm.nodes[gem.x-1,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}
-							// CHECK RIGHT UP IS OF TYPE
-							if (mm.nodes[gem.x+2,gem.y+1].gem.type == gem.type)
-							{
-								print("Found possible match right up.");
-								StartCoroutine(mm.nodes[gem.x+2,gem.y+1].gem.SwapGem(mm.nodes[gem.x+2,gem.y+1].gem,mm.nodes[gem.x+2,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}
-							// CHECK RIGHT DOWN IS OF TYPE
-							if (mm.nodes[gem.x+2,gem.y-1].gem.type == gem.type)
-							{
-								print("Found possible match right down.");
-								StartCoroutine(mm.nodes[gem.x+2,gem.y-1].gem.SwapGem(mm.nodes[gem.x+2,gem.y-1].gem,mm.nodes[gem.x+2,gem.y].gem,0.25f));
-								mm.EndTurn();
-								return true;
-							}	
-						}
-					}
+					matchTwos.Add(mm.nodes[x,y].gem);
 				}
 			}
 		}
-		return false;
+
+		return matchTwos;
 	}
 
+	public Gem[] MatchHorizontalLeftUp (Gem gem)
+	{
+		if (gem.x > 0)
+		{
+			if (gem.y < mm.size-1)
+			{
+				if (mm.nodes[gem.x-1,gem.y+1].gem.type == gem.type)
+				{
+					return new Gem[2] {mm.nodes[gem.x-1,gem.y].gem,mm.nodes[gem.x-1,gem.y+1].gem};
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Gem[] MatchHorizontalLeftDown (Gem gem)
+	{
+		if (gem.x > 0)
+		{
+			if (gem.y > 0)
+			{
+				if (mm.nodes[gem.x-1,gem.y-1].gem.type == gem.type)
+				{
+					return new Gem[2] {mm.nodes[gem.x-1,gem.y].gem,mm.nodes[gem.x-1,gem.y-1].gem};
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Gem[] MatchHorizontalLeftMiddle (Gem gem)
+	{
+		if (gem.x > 1)
+		{
+			if (mm.nodes[gem.x-2,gem.y].gem.type == gem.type)
+			{
+				return new Gem[2] {mm.nodes[gem.x-1,gem.y].gem,mm.nodes[gem.x-2,gem.y].gem};
+			}
+		}
+
+		return null;
+	}
+
+	public Gem[] MatchHorizontalRightUp (Gem gem)
+	{
+		if (gem.x < mm.size-2)
+		{
+			if (gem.y < mm.size-1)
+			{
+				if (mm.nodes[gem.x+2,gem.y+1].gem.type == gem.type)
+				{
+					return new Gem[2] {mm.nodes[gem.x+2,gem.y].gem,mm.nodes[gem.x+2,gem.y+1].gem};
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Gem[] MatchHorizontalRightDown (Gem gem)
+	{
+		if (gem.x < mm.size-2)
+		{
+			if (gem.y > 0)
+			{
+				if (mm.nodes[gem.x+2,gem.y-1].gem.type == gem.type)
+				{
+					return new Gem[2] {mm.nodes[gem.x+2,gem.y].gem,mm.nodes[gem.x+2,gem.y-1].gem};
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Gem[] MatchHorizontalRightMiddle (Gem gem)
+	{
+		if (gem.x < mm.size-3)
+		{
+			if (mm.nodes[gem.x+3,gem.y].gem.type == gem.type)
+			{
+				return new Gem[2] {mm.nodes[gem.x+3,gem.y].gem,mm.nodes[gem.x+2,gem.y].gem};
+			}
+		}
+
+		return null;
+	}
 }
